@@ -8,12 +8,15 @@ import (
 	"github.com/mrpsousa/api/internal/usecase"
 )
 
-var client = http.Client{}
+var (
+	client = http.Client{}
+)
 
 func SinceHandler(w http.ResponseWriter, r *http.Request) {
 	msgDecoded, err := DecodeSinceDateFromURL(r)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(nil)
 		fmt.Println(err) //may be a log
 		return
 	}
@@ -21,6 +24,7 @@ func SinceHandler(w http.ResponseWriter, r *http.Request) {
 	output, err := gituser.GitUserSince(*msgDecoded)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(nil)
 		fmt.Println(err) //may be a log
 		return
 	}
@@ -33,6 +37,7 @@ func UserDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	msgDecoded, err := DecodeUserNameToDetailFromURL(r)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(nil)
 		fmt.Println(err) //may be a log
 		return
 	}
@@ -41,6 +46,7 @@ func UserDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	output, err := gituser.GitUserDetails(*msgDecoded)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(nil)
 		fmt.Println(err) //may be a log
 		return
 	}
@@ -53,6 +59,7 @@ func UserReposHandler(w http.ResponseWriter, r *http.Request) {
 	msgDecoded, err := DecodeUserNameToReposFromURL(r)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(nil)
 		fmt.Println(err) //may be a log
 		return
 	}
@@ -61,6 +68,7 @@ func UserReposHandler(w http.ResponseWriter, r *http.Request) {
 	output, err := gituser.GitUserRepos(*msgDecoded)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(nil)
 		fmt.Println(err) //may be a log
 		return
 	}

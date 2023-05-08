@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/mrpsousa/api/internal/entity"
 	service "github.com/mrpsousa/api/internal/usecase"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,6 +17,5 @@ func TestSinceSuccess(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, response)
-	var array = make([]string, 0, len(response))
-	assert.IsType(t, array, response)
+	assert.IsType(t, entity.UsersReponse{}, *response)
 }

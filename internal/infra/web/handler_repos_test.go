@@ -33,7 +33,7 @@ func TestUserReposHandler(t *testing.T) {
 func TestUserReposHandlerWithOutValueError(t *testing.T) {
 	reqUrl := fmt.Sprintf("/api/users/%v/repos", "")
 	req, err := http.NewRequest("GET", reqUrl, nil)
-
+	expected := string("null\n")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,4 +48,26 @@ func TestUserReposHandlerWithOutValueError(t *testing.T) {
 	}
 
 	assert.Equal(t, http.StatusBadRequest, rr.Code)
+	assert.Equal(t, expected, rr.Body.String())
+}
+
+func TestUserReposHandlerWrongValueError(t *testing.T) {
+	reqUrl := fmt.Sprintf("/api/users/%v/repos", "89425uup89354897tyu3hgf8349uytrtru3489ru34")
+	req, err := http.NewRequest("GET", reqUrl, nil)
+	expected := string("{\"repositories\":[]}\n")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(web.UserReposHandler)
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Equal(t, expected, rr.Body.String())
 }

@@ -11,8 +11,8 @@ import (
 
 func TestUserDetailSuccess(t *testing.T) {
 	value := "octocat"
-	expected := &entity.GitHubUser{Login: "OctocatOctocat", Name: "Christian Amoros", URL: "https://api.github.com/users/OctocatOctocat"}
-	model := &entity.GitHubUser{}
+	expected := &entity.GitHubUserResponse{entity.GitHubUser{Login: "OctocatOctocat", Name: "Christian Amoros", URL: "https://api.github.com/users/OctocatOctocat"}}
+	model := &entity.GitHubUserResponse{}
 	client := http.Client{}
 	gituser := service.NewGitUser(client)
 	response, err := gituser.GitUserDetails(value)

@@ -9,10 +9,12 @@ import (
 	"github.com/mrpsousa/api/internal/entity"
 )
 
+var URLBase = "https://api.github.com/users"
+
 type GitUser interface {
-	GitUserSince(since string) ([]string, error)
-	GitUserDetails(userName string) (*entity.GitHubUser, error)
-	GitUserRepos(UserName string) ([]string, error)
+	GitUserSince(since string) (*entity.UsersReponse, error)
+	GitUserDetails(userName string) (*entity.GitHubUserResponse, error)
+	GitUserRepos(UserName string) (*entity.RepoReponse, error)
 }
 
 type gitUsers struct {
@@ -25,8 +27,9 @@ func NewGitUser(client http.Client) GitUser {
 	}
 }
 
-func (s *gitUsers) GitUserSince(since string) ([]string, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.github.com/users?since%s=3&per_page=10", since), nil)
+func (s *gitUsers) GitUserSince(since string) (*entity.UsersReponse, error) {
+	var usersReponse = entity.UsersReponse{}
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s?since%s=3&per_page=10", URLBase, since), nil)
 	if err != nil {
 		err := errors.New("creating_request: get_users_since")
 		return nil, err
@@ -40,22 +43,19 @@ func (s *gitUsers) GitUserSince(since string) ([]string, error) {
 	defer resp.Body.Close()
 
 	var users []entity.UserSince
-
-	err = json.NewDecoder(resp.Body).Decode(&users)
-	if err != nil {
-		panic(err)
-	}
+	json.NewDecoder(resp.Body).Decode(&users)
 
 	var userArray = make([]string, 0, len(users))
 	for _, user := range users {
 		userArray = append(userArray, user.Login)
 	}
+	usersReponse.Users = userArray
 
-	return userArray, nil
+	return &usersReponse, nil
 }
 
-func (s *gitUsers) GitUserDetails(userName string) (*entity.GitHubUser, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.github.com/users/octocat%s", userName), nil)
+func (s *gitUsers) GitUserDetails(userName string) (*entity.GitHubUserResponse, error) {
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/octocat%s", URLBase, userName), nil)
 	if err != nil {
 		err := errors.New("creating_request: get_users_details")
 		return nil, err
@@ -67,18 +67,15 @@ func (s *gitUsers) GitUserDetails(userName string) (*entity.GitHubUser, error) {
 	}
 	defer resp.Body.Close()
 
-	var userDetail entity.GitHubUser
-	err = json.NewDecoder(resp.Body).Decode(&userDetail)
-	if err != nil {
-		err := errors.New("deconding_json")
-		return nil, err
-	}
+	var userDetail entity.GitHubUserResponse
+	json.NewDecoder(resp.Body).Decode(&userDetail.User)
 
 	return &userDetail, nil
 }
 
-func (s *gitUsers) GitUserRepos(userName string) ([]string, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("https://api.github.com/users/%s/repos", userName), nil)
+func (s *gitUsers) GitUserRepos(userName string) (*entity.RepoReponse, error) {
+	var response = entity.RepoReponse{}
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/repos", URLBase, userName), nil)
 	if err != nil {
 		err := errors.New("creating_request: get_users_details")
 		return nil, err
@@ -91,15 +88,13 @@ func (s *gitUsers) GitUserRepos(userName string) ([]string, error) {
 	defer resp.Body.Close()
 
 	var userRepos []entity.Repository
-	err = json.NewDecoder(resp.Body).Decode(&userRepos)
-	if err != nil {
-		panic(err)
-	}
+	json.NewDecoder(resp.Body).Decode(&userRepos)
+
 	var repoArray = make([]string, 0, len(userRepos))
 	for _, repo := range userRepos {
 		repoArray = append(repoArray, repo.Name)
 	}
-
-	return repoArray, nil
+	response.Repositories = repoArray
+	return &response, nil
 
 }

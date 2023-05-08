@@ -28,12 +28,14 @@ func TestSinceHandler(t *testing.T) {
 	}
 	assert.NotEmpty(t, rr.Body)
 	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Equal(t, "algo", rr.Body.String())
 
 }
 
 func TestSinceHandlerNotNumericError(t *testing.T) {
 	reqUrl := fmt.Sprintf("api/users?since=%v", "aBc")
 	req, err := http.NewRequest("GET", reqUrl, nil)
+	expected := string("null\n")
 
 	if err != nil {
 		t.Fatal(err)
@@ -49,5 +51,6 @@ func TestSinceHandlerNotNumericError(t *testing.T) {
 	}
 
 	assert.Equal(t, http.StatusBadRequest, rr.Code)
+	assert.Equal(t, expected, rr.Body.String())
 
 }
