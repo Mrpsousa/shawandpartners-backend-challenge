@@ -1,11 +1,5 @@
 package entity
 
-type User struct {
-	ID        int    `json:"id"`
-	Login     string `json:"login"`
-	AvatarURL string `json:"avatar_url"`
-}
-
 type UserSince struct {
 	Login string `json:"login"`
 }
