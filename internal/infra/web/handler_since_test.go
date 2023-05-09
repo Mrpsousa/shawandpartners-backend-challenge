@@ -13,7 +13,7 @@ import (
 func TestSinceHandler(t *testing.T) {
 	reqUrl := fmt.Sprintf("api/users?since=%v", 12)
 	req, err := http.NewRequest("GET", reqUrl, nil)
-
+	expected := "{\"users\":[\"mojombo\",\"defunkt\",\"pjhyett\",\"wycats\",\"ezmobius\",\"ivey\",\"evanphx\",\"vanpelt\",\"wayneeseguin\",\"brynary\"]}\n"
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,7 +28,7 @@ func TestSinceHandler(t *testing.T) {
 	}
 	assert.NotEmpty(t, rr.Body)
 	assert.Equal(t, http.StatusOK, rr.Code)
-	assert.Equal(t, "algo", rr.Body.String())
+	assert.Equal(t, expected, rr.Body.String())
 
 }
 

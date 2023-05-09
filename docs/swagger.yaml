@@ -1,0 +1,353 @@
+openapi: 3.0.0
+info:
+  title: shawandpartners-api-go
+  description: Application responsible to manage git users
+  version: 1.0.0
+tags:
+  - name: Git Users
+paths:
+  /api/users:
+    get:
+      summary: Get users by since
+      description: Get users by since
+      parameters:
+        - name: since
+          in: query
+          description: since
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersResponse'
+
+  /api/users/{username}/details:
+    get:
+      summary: Get users by username
+      description: Get users by username
+      parameters:
+        - name: username
+          in: query
+          description: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GitHubUserResponse'
+
+  /api/users/{username}/repos:
+     get:
+      summary: Get repositories from users by username
+      description: Get repositories from users by username
+      parameters:
+        - name: username
+          in: query
+          description: username
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RepoResponse'
+  
+components:
+  schemas:
+    UsersResponse:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            type: string
+      example:
+        users:
+          - Alice
+          - Bob
+          - Charlie
+
+    GitHubUser:
+      type: object
+      properties:
+        login:
+          type: string
+        name:
+          type: string
+        url:
+          type: string
+      example:
+        login: octocat
+        name: The Octocat
+        url: https://github.com/octocat
+    GitHubUserResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/GitHubUser'
+      example:
+        user:
+          login: octocat
+          name: The Octocat
+          url: https://github.com/octocat
+    RepoResponse:
+      type: object
+      properties:
+        repositories:
+          type: array
+          items:
+            type: string
+      example:
+        repositories:
+          - my-repo-1
+          - my-repo-2
+          - my-repo-3
+  
+# components:
+#   schemas:
+#     usersReponse: 
+#       type: array
+#       properties:
+#         users:
+#             type: string
+           
+
+        
+
+#     legoRequest: 
+#       type: object
+#       properties:
+#         msg:
+#          type: object
+#          properties:
+#           type:
+#             type: string
+#             example: "WorkOrderCreated"
+#           time:
+#             type: string
+#             example: "2022-11-16T16:05:02.551692006-04:00"
+#           process: 
+#             type: string
+#             example: "receiving-forward-lego"
+#           payload:
+#             type: object
+#             properties:
+#               workorder_id:
+#                 type: string
+#                 example: "wo_reception_id"
+#               target:
+#                 type: object
+#                 properties:
+#                   type: 
+#                     type: string
+#                     example: "receiving"
+#                   id:
+#                     type: string
+#                     example: "{site_id}_{facility_id}_{dock_name}"
+#               assignees:
+#                 type: array
+#                 items: 
+#                   type: string
+#                   example: "rep1"
+#               input:
+#                 type: object
+#                 properties:
+#                   site:
+#                     type: string
+#                     example: "MLB"
+#                   facility:
+#                     type: object
+#                     properties:
+#                       id:
+#                         type: string
+#                         example: "ARENA"
+#                   dock:
+#                     type: object
+#                     properties:
+#                       id:
+#                         type: string
+#                         example: "asdas"
+#                       name:
+#                         type: string
+#                         example: "1001"
+#                       workstation:
+#                         type: string
+#                         example: "PRINTER-HP"
+#                   carrier:
+#                     type: object
+#                     properties:
+#                       id:
+#                         type: string
+#                         example: "101011"
+#                   route:
+#                     type: object
+#                     properties:
+#                       id:
+#                         type: string
+#                         example: "4"
+#                       type:
+#                         type: string
+#                         example: "FM"
+#                   driver:
+#                     type: object
+#                     properties:
+#                       id:
+#                         type: string
+#                         example: "123123"
+#                       identification_type:
+#                         type: string
+#                         example: "CPF"
+#                       identification_value:
+#                         type: string
+#                         example: "123123123"
+#                       name:
+#                         type: string
+#                         example: "Marta Roberto"
+#                   vehicle:
+#                     type: object
+#                     properties:
+#                       id:
+#                         type: string
+#                         example: "123123"
+#                       license_plate:
+#                         type: string
+#                         example: "abc 123"
+
+    
+#     inboundInfo:
+#       type: object
+#       properties:
+#         inbound_id:
+#           type: string
+#           example: "41c0101e-d7b1-11ed-931d-da759f8100e7"
+#         truck_id:
+#           type: string
+#           example: "abc 123"
+#         dock_id:
+#           type: number
+#           example: 1001
+#         status:
+#           type: string
+#           example: "open"
+#         carrier_id:
+#           type: number
+#           example: 101011
+#         facility_id:
+#           type: string
+#           example: "ARENA"
+#         site:
+#           type: string
+#           example: "MLB"
+#         date_opened:
+#           type: string
+#           example: "2022-11-16T20:05:02Z"
+#         workorder_id:
+#           type: string
+#           example: "wo_reception_id"
+#         user_id:
+#           type: string
+#           example: "rep1"
+#         accepted_shipments:
+#           type: array
+#           items: 
+#             type: number
+#         rejected_shipments:
+#           type: array
+#           items: 
+#             type: number
+#     inbound: 
+#           type: object
+#           properties: 
+#             id: 
+#               type: string
+#             status: 
+#               type: string
+#             carrier_id: 
+#               type: integer
+#               format: int32
+#             carrier_name: 
+#               type: string
+#             truck_id: 
+#               type: string
+#             dock_id: 
+#               type: integer
+#               format: int32
+#             date_opened: 
+#               type: string
+#               format: date-time
+#             inbound_operation: 
+#               type: string
+#             reject_reason: 
+#               type: string
+#             included_at: 
+#               type: string
+#               format: date-time
+#     InboundFinish: 
+#       type: object
+#       properties:
+#         msg:
+#          type: object
+#          properties:
+#           inbound_id:
+#             type: string
+#             example: "id"
+#           shipment_id:
+#             type: number
+#             example: 23454534
+#           date_closed:
+#             type: string
+#             example: "2023-03-29T01:52:46Z"
+#           facility_id: 
+#             type: string
+#             example: "TEST"
+#     InboundRequest:
+#       type: object
+#       properties:
+#         shipment_id:
+#           type: number
+#           example: 23454534
+#         date_closed:
+#           type: string
+#           example: "2023-03-29T01:52:46Z"
+#         inbound_operation:
+#           type: string
+#           example: "inhub_finished"
+#         status:
+#           type: string
+#           example: "closed"
+#         facility_id:
+#           type: string
+#           example: "TEST"
+
+#     InboundFinalize: 
+#       type: object
+#       properties:
+#         type:
+#             type: string
+#             example: "WorkOrderFinished"
+#         process: 
+#             type: string
+#             example: "receiving-forward-lego"
+#         time:
+#             type: string
+#             example: "2022-11-16T16:05:02.551692006-04:00"
+#         payload:
+#             type: object
+#             properties:
+#               workorder_id:
+#                 type: string
+#                 example: "work_order_id"
+#               parent:
+#                 type: string
+#                 example: ""
