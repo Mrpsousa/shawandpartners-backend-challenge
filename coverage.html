@@ -59,7 +59,7 @@
 				
 				<option value="file1">github.com/mrpsousa/api/internal/infra/web/handler.go (75.5%)</option>
 				
-				<option value="file2">github.com/mrpsousa/api/internal/usecase/git_user_service.go (46.8%)</option>
+				<option value="file2">github.com/mrpsousa/api/internal/usecase/git_user_service.go (74.5%)</option>
 				
 				</select>
 			</div>
@@ -135,7 +135,7 @@ func DecodeUserNameToDetailFromURL(r *http.Request) (*string, error) <span class
 
 import (
         "encoding/json"
-        "fmt"
+        "log"
         http "net/http"
 
         "github.com/mrpsousa/api/internal/usecase"
@@ -150,7 +150,7 @@ func SinceHandler(w http.ResponseWriter, r *http.Request) <span class="cov8" tit
         if err != nil </span><span class="cov8" title="1">{
                 w.WriteHeader(http.StatusBadRequest)
                 json.NewEncoder(w).Encode(nil)
-                fmt.Println(err) //may be a log
+                log.Println(err)
                 return
         }</span>
         <span class="cov8" title="1">gituser := usecase.NewGitUser(client)
@@ -158,7 +158,7 @@ func SinceHandler(w http.ResponseWriter, r *http.Request) <span class="cov8" tit
         if err != nil </span><span class="cov0" title="0">{
                 w.WriteHeader(http.StatusInternalServerError)
                 json.NewEncoder(w).Encode(nil)
-                fmt.Println(err) //may be a log
+                log.Println(err)
                 return
         }</span>
         <span class="cov8" title="1">w.Header().Set("Content-Type", "application/json")
@@ -171,7 +171,7 @@ func UserDetailsHandler(w http.ResponseWriter, r *http.Request) <span class="cov
         if err != nil </span><span class="cov8" title="1">{
                 w.WriteHeader(http.StatusBadRequest)
                 json.NewEncoder(w).Encode(nil)
-                fmt.Println(err) //may be a log
+                log.Println(err)
                 return
         }</span>
 
@@ -180,7 +180,7 @@ func UserDetailsHandler(w http.ResponseWriter, r *http.Request) <span class="cov
         if err != nil </span><span class="cov0" title="0">{
                 w.WriteHeader(http.StatusInternalServerError)
                 json.NewEncoder(w).Encode(nil)
-                fmt.Println(err) //may be a log
+                log.Println(err)
                 return
         }</span>
         <span class="cov8" title="1">w.Header().Set("Content-Type", "application/json")
@@ -193,7 +193,7 @@ func UserReposHandler(w http.ResponseWriter, r *http.Request) <span class="cov8"
         if err != nil </span><span class="cov8" title="1">{
                 w.WriteHeader(http.StatusBadRequest)
                 json.NewEncoder(w).Encode(nil)
-                fmt.Println(err) //may be a log
+                log.Println(err)
                 return
         }</span>
         <span class="cov8" title="1">client := &amp;http.Client{}
@@ -202,7 +202,7 @@ func UserReposHandler(w http.ResponseWriter, r *http.Request) <span class="cov8"
         if err != nil </span><span class="cov0" title="0">{
                 w.WriteHeader(http.StatusInternalServerError)
                 json.NewEncoder(w).Encode(nil)
-                fmt.Println(err) //may be a log
+                log.Println(err)
                 return
         }</span>
         <span class="cov8" title="1">w.Header().Set("Content-Type", "application/json")
@@ -242,7 +242,7 @@ func NewGitUser(client http.Client) GitUser <span class="cov8" title="1">{
 
 func (s *gitUsers) GitUserSince(since string) (*entity.UsersReponse, error) <span class="cov8" title="1">{
         var usersReponse = entity.UsersReponse{}
-        req, err := http.NewRequest("GET", fmt.Sprintf("%s?since%s=3&amp;per_page=10", URLBase, since), nil)
+        req, err := http.NewRequest("GET", fmt.Sprintf("%s?since%s=3&amp;per_page=50", URLBase, since), nil)
         if err != nil </span><span class="cov0" title="0">{
                 err := errors.New("creating_request: get_users_since")
                 return nil, err
@@ -268,7 +268,7 @@ func (s *gitUsers) GitUserSince(since string) (*entity.UsersReponse, error) <spa
 }
 
 func (s *gitUsers) GitUserDetails(userName string) (*entity.GitHubUserResponse, error) <span class="cov8" title="1">{
-        req, err := http.NewRequest("GET", fmt.Sprintf("%s/octocat%s", URLBase, userName), nil)
+        req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", URLBase, userName), nil)
         if err != nil </span><span class="cov0" title="0">{
                 err := errors.New("creating_request: get_users_details")
                 return nil, err
@@ -286,28 +286,28 @@ func (s *gitUsers) GitUserDetails(userName string) (*entity.GitHubUserResponse, 
         return &amp;userDetail, nil</span>
 }
 
-func (s *gitUsers) GitUserRepos(userName string) (*entity.RepoReponse, error) <span class="cov0" title="0">{
+func (s *gitUsers) GitUserRepos(userName string) (*entity.RepoReponse, error) <span class="cov8" title="1">{
         var response = entity.RepoReponse{}
         req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s/repos", URLBase, userName), nil)
         if err != nil </span><span class="cov0" title="0">{
                 err := errors.New("creating_request: get_users_details")
                 return nil, err
         }</span>
-        <span class="cov0" title="0">resp, err := s.client.Do(req)
+        <span class="cov8" title="1">resp, err := s.client.Do(req)
         if err != nil </span><span class="cov0" title="0">{
                 err := errors.New("sending_request: get_users_details")
                 return nil, err
         }</span>
-        <span class="cov0" title="0">defer resp.Body.Close()
+        <span class="cov8" title="1">defer resp.Body.Close()
 
         var userRepos []entity.Repository
         json.NewDecoder(resp.Body).Decode(&amp;userRepos)
 
         var repoArray = make([]string, 0, len(userRepos))
-        for _, repo := range userRepos </span><span class="cov0" title="0">{
+        for _, repo := range userRepos </span><span class="cov8" title="1">{
                 repoArray = append(repoArray, repo.Name)
         }</span>
-        <span class="cov0" title="0">response.Repositories = repoArray
+        <span class="cov8" title="1">response.Repositories = repoArray
         return &amp;response, nil</span>
 
 }
