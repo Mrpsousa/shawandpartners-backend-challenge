@@ -4,8 +4,8 @@
     Inside project root
         $ docker-compose up -d
     or
-        $ docker pull mrpsousa/api-go:0.0.3
-        $ docker run -d -p 8080:8080 mrpsousa/api-go:0.0.3
+        $ docker pull mrpsousa/api-go:0.0.4
+        $ docker run -d -p 8080:8080 mrpsousa/api-go:0.0.4
 
 ### Endpoints
     - GET - /api/users?since={number} (example: localhost:8080/api/users?since=2) (returning 50 as maximum)
