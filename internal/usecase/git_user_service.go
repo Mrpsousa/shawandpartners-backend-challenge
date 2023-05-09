@@ -29,7 +29,7 @@ func NewGitUser(client http.Client) GitUser {
 
 func (s *gitUsers) GitUserSince(since string) (*entity.UsersReponse, error) {
 	var usersReponse = entity.UsersReponse{}
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s?since%s=3&per_page=10", URLBase, since), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s?since%s=3&per_page=50", URLBase, since), nil)
 	if err != nil {
 		err := errors.New("creating_request: get_users_since")
 		return nil, err
@@ -55,7 +55,7 @@ func (s *gitUsers) GitUserSince(since string) (*entity.UsersReponse, error) {
 }
 
 func (s *gitUsers) GitUserDetails(userName string) (*entity.GitHubUserResponse, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s/octocat%s", URLBase, userName), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", URLBase, userName), nil)
 	if err != nil {
 		err := errors.New("creating_request: get_users_details")
 		return nil, err

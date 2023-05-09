@@ -11,14 +11,14 @@ import (
 
 func TestReposSuccess(t *testing.T) {
 	value := "octocat"
-	expected := entity.UsersReponse(entity.UsersReponse{Users: []string{"mojombo", "defunkt", "pjhyett", "wycats", "ezmobius", "ivey", "evanphx", "vanpelt", "wayneeseguin", "brynary"}})
+	expected := entity.RepoReponse(entity.RepoReponse{Repositories: []string{"boysenberry-repo-1", "git-consortium", "hello-worId", "Hello-World", "linguist", "octocat.github.io", "Spoon-Knife", "test-repo1"}})
 	client := http.Client{}
 	gituser := service.NewGitUser(client)
-	response, err := gituser.GitUserSince(value)
+	response, err := gituser.GitUserRepos(value)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, response)
-	assert.IsType(t, entity.UsersReponse{}, *response)
+	assert.IsType(t, entity.RepoReponse{}, *response)
 	assert.Equal(t, expected, *response)
 
 }

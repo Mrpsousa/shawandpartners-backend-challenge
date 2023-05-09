@@ -13,7 +13,7 @@ import (
 func TestSinceHandler(t *testing.T) {
 	reqUrl := fmt.Sprintf("api/users?since=%v", 12)
 	req, err := http.NewRequest("GET", reqUrl, nil)
-	expected := "{\"users\":[\"mojombo\",\"defunkt\",\"pjhyett\",\"wycats\",\"ezmobius\",\"ivey\",\"evanphx\",\"vanpelt\",\"wayneeseguin\",\"brynary\"]}\n"
+	expected := "{\"users\":[\"mojombo\",\"defunkt\",\"pjhyett\",\"wycats\",\"ezmobius\",\"ivey\",\"evanphx\",\"vanpelt\",\"wayneeseguin\",\"brynary\",\"kevinclark\",\"technoweenie\",\"macournoyer\",\"takeo\",\"caged\",\"topfunky\",\"anotherjesse\",\"roland\",\"lukas\",\"fanvsfan\",\"tomtt\",\"railsjitsu\",\"nitay\",\"kevwil\",\"KirinDave\",\"jamesgolick\",\"atmos\",\"errfree\",\"mojodna\",\"bmizerany\",\"jnewland\",\"joshknowles\",\"hornbeck\",\"jwhitmire\",\"elbowdonkey\",\"reinh\",\"knzconnor\",\"bs\",\"rsanheim\",\"schacon\",\"uggedal\",\"bruce\",\"sam\",\"mmower\",\"abhay\",\"rabble\",\"benburkert\",\"indirect\",\"fearoffish\",\"ry\"]}\n"
 	if err != nil {
 		t.Fatal(err)
 	}

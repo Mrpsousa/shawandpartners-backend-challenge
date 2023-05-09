@@ -2,7 +2,7 @@ package web
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	http "net/http"
 
 	"github.com/mrpsousa/api/internal/usecase"
@@ -17,7 +17,7 @@ func SinceHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(nil)
-		fmt.Println(err) //may be a log
+		log.Println(err)
 		return
 	}
 	gituser := usecase.NewGitUser(client)
@@ -25,7 +25,7 @@ func SinceHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(nil)
-		fmt.Println(err) //may be a log
+		log.Println(err)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -38,7 +38,7 @@ func UserDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(nil)
-		fmt.Println(err) //may be a log
+		log.Println(err)
 		return
 	}
 
@@ -47,7 +47,7 @@ func UserDetailsHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(nil)
-		fmt.Println(err) //may be a log
+		log.Println(err)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -60,7 +60,7 @@ func UserReposHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(nil)
-		fmt.Println(err) //may be a log
+		log.Println(err)
 		return
 	}
 	client := &http.Client{}
@@ -69,7 +69,7 @@ func UserReposHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(nil)
-		fmt.Println(err) //may be a log
+		log.Println(err)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
